@@ -6,6 +6,11 @@
 #
 
 variable "eip_allocation_id" {
-  description = "Value of the allocation id for Elastic IP Address"
+  description = "Value of the allocation id for Elastic IP address"
+  type        = string
+}
+
+variable "key_pair_name" {
+  description = "Value of the key pair name for EC2 instance"
   type        = string
 }

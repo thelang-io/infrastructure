@@ -48,6 +48,7 @@ resource "aws_security_group" "api" {
 resource "aws_instance" "api" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
+  key_name               = var.key_pair_name
   user_data              = file("api-init.sh")
   vpc_security_group_ids = [aws_security_group.api.id]
 
