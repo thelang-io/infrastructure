@@ -46,7 +46,7 @@ resource "aws_security_group" "api" {
 }
 
 resource "aws_instance" "api" {
-  ami                    = "ami-05f7491af5eef733a"
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.api.id]
 
