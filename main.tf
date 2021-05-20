@@ -47,3 +47,9 @@ resource "aws_instance" "the-api-ec2" {
     Name = "the-api"
   }
 }
+
+resource "aws_eip_association" "the-api-eip-assoc" {
+  allow_reassociation = false
+  instance_id         = aws_instance.the-api-ec2.id
+  allocation_id       = var.eip_allocation_id
+}
