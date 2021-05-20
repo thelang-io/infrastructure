@@ -21,7 +21,7 @@ provider "aws" {
   region  = "eu-central-1"
 }
 
-resource "aws_security_group" "the-api-sg" {
+resource "aws_security_group" "api" {
   name = "the-api-sg"
 
   ingress {
@@ -45,18 +45,18 @@ resource "aws_security_group" "the-api-sg" {
   }
 }
 
-resource "aws_instance" "the-api-ec2" {
+resource "aws_instance" "api" {
   ami                    = "ami-05f7491af5eef733a"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.the-api-sg.id]
+  vpc_security_group_ids = [aws_security_group.api.id]
 
   tags = {
     Name = "the-api"
   }
 }
 
-resource "aws_eip_association" "the-api-eip-assoc" {
+resource "aws_eip_association" "api" {
   allow_reassociation = false
-  instance_id         = aws_instance.the-api-ec2.id
+  instance_id         = aws_instance.api.id
   allocation_id       = var.eip_allocation_id
 }
