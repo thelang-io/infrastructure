@@ -11,3 +11,18 @@ apt-get autoclean
 apt-get autoremove
 apt-get clean
 rm -rf /tmp/* /var/tmp/*
+
+# Replace default nginx config
+rm /etc/nginx/sites-enabled/default
+cat > /etc/nginx/sites-available/api.thelang.io << EOF
+server {
+  listen 80;
+  listen [::]:80;
+  server_name api.thelang.io;
+
+  root /var/www/html;
+  index index.html index.htm index.nginx-debian.html;
+}
+EOF
+ln -sf /etc/nginx/sites-available/api.thelang.io /etc/nginx/sites-enabled/
+systemctl restart nginx
