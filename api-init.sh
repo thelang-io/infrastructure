@@ -1,6 +1,10 @@
-#!/bin/sh -e
+#!/bin/bash -ex
+
+# Update & Upgrade
 apt-get update -y
 apt-get upgrade -y
+
+# Install dependencies and clean
 curl -L https://deb.nodesource.com/setup_lts.x | bash
 apt-get install -y build-essential certbot nginx nodejs python3-certbot-nginx
 apt-get autoclean
