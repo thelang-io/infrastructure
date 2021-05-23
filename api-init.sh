@@ -1,5 +1,10 @@
 #!/bin/bash -ex
 
+#
+# Copyright (c) 2021-present Aaron Delasy
+# Licensed under the MIT License
+#
+
 # Update & Upgrade
 apt-get update -y
 apt-get upgrade -y

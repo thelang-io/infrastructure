@@ -1,8 +1,6 @@
 #
-# Copyright (c) Aaron Delasy
-#
-# Unauthorized copying of this file, via any medium is strictly prohibited
-# Proprietary and confidential
+# Copyright (c) 2021-present Aaron Delasy
+# Licensed under the MIT License
 #
 
 variable "eip_allocation_id" {
