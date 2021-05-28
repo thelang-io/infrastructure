@@ -3,6 +3,11 @@
 # Licensed under the MIT License
 #
 
+variable "code_star_connection_arn" {
+  description = "Value of the arn for CodeStar connection"
+  type        = string
+}
+
 variable "eip_allocation_id" {
   description = "Value of the allocation id for Elastic IP address"
   type        = string
