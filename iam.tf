@@ -80,6 +80,33 @@ data "aws_iam_policy_document" "code_pipeline_role" {
   }
 }
 
+data "aws_iam_policy_document" "code_pipeline_role_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:GetBucketVersioning",
+      "s3:PutObjectAcl",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      aws_s3_bucket.code_pipeline.arn,
+      "${aws_s3_bucket.code_pipeline.arn}/*"
+    ]
+  }
+
+  statement {
+    actions   = ["codestar-connections:UseConnection"]
+    resources = [data.aws_codestarconnections_connection.langthe.arn]
+  }
+
+  statement {
+    actions   = ["codebuild:BatchGetBuilds", "codebuild:StartBuild"]
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_role" "code_build" {
   name               = "AWSCodeBuildServiceRole"
   assume_role_policy = data.aws_iam_policy_document.code_build_role.json
@@ -94,4 +121,10 @@ resource "aws_iam_role_policy" "code_build" {
 resource "aws_iam_role" "code_pipeline" {
   name               = "AWSCodePipelineServiceRole"
   assume_role_policy = data.aws_iam_policy_document.code_pipeline_role.json
+}
+
+resource "aws_iam_role_policy" "code_pipeline" {
+  name   = "AWSCodePipelineServiceRolePolicy"
+  role   = aws_iam_role.code_pipeline.id
+  policy = data.aws_iam_policy_document.code_pipeline_role_policy.json
 }
