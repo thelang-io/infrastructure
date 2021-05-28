@@ -4,8 +4,8 @@
 #
 
 resource "aws_codebuild_project" "api_build" {
-  name          = "the-api-codebuild-build"
-  service_role  = aws_iam_role.code_build.arn
+  name         = "the-api-codebuild-build"
+  service_role = aws_iam_role.code_build.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -26,8 +26,8 @@ resource "aws_codebuild_project" "api_build" {
 }
 
 resource "aws_codebuild_project" "api_test" {
-  name          = "the-api-codebuild-test"
-  service_role  = aws_iam_role.code_build.arn
+  name         = "the-api-codebuild-test"
+  service_role = aws_iam_role.code_build.arn
 
   artifacts {
     type = "CODEPIPELINE"
