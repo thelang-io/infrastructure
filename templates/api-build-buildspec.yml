@@ -11,6 +11,9 @@ phases:
       nodejs: latest
   pre_build:
     commands:
+      - npm install --only=prod
+      - mv node_modules build_node_modules
+      - rm -f paclage-lock.json
       - npm install
   build:
     commands:
