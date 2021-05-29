@@ -5,10 +5,11 @@
 
 terraform {
   backend "s3" {
-    bucket  = "private.thelang.io"
+    bucket  = "the-private"
     key     = "terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
+    dynamodb_table = "the-private"
   }
 
   required_providers {
