@@ -4,7 +4,7 @@
 #
 
 data "template_file" "api_build_buildspec" {
-  template = file("templates/te2135.yml")
+  template = file("templates/api-build-buildspec.yml")
 }
 
 data "template_file" "api_test_buildspec" {
