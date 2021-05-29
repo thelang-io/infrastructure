@@ -4,7 +4,7 @@
 #
 
 resource "aws_codebuild_project" "api_build" {
-  name         = "the-api-codebuild-build"
+  name         = "the-api-build"
   service_role = aws_iam_role.code_build.arn
 
   artifacts {
@@ -26,7 +26,7 @@ resource "aws_codebuild_project" "api_build" {
 }
 
 resource "aws_codebuild_project" "api_test" {
-  name         = "the-api-codebuild-test"
+  name         = "the-api-test"
   service_role = aws_iam_role.code_build.arn
 
   artifacts {
