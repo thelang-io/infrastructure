@@ -7,7 +7,7 @@ data "template_file" "api_build_buildspec" {
   template = file("templates/api-build-buildspec.yml")
 
   vars = {
-    appspec_content = file("templates/api-appspec.yml")
+    appspec_content      = file("templates/api-appspec.yml")
     start_script_content = file("templates/api-start.sh")
   }
 }

@@ -13,10 +13,10 @@
 
 terraform {
   backend "s3" {
-    bucket  = "the-private"
-    key     = "terraform.tfstate"
-    region  = "us-east-1"
-    encrypt = true
+    bucket         = "the-private"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
     dynamodb_table = "the-private"
   }
 
