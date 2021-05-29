@@ -1,0 +1,17 @@
+#
+# Copyright (c) 2021-present Aaron Delasy
+# Licensed under the MIT License
+#
+
+version: 0.0
+
+os: linux
+
+files:
+  - source: /
+    destination: /app
+
+hooks:
+  ApplicationStart:
+    - location: scripts/start.sh
+      runas: ubuntu
