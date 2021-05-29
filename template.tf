@@ -12,5 +12,5 @@ data "template_file" "api_test_buildspec" {
 }
 
 data "template_file" "api_user_data" {
-  template = file("templates/api-user-data.yml")
+  template = file("templates/api-user-data.sh")
 }
