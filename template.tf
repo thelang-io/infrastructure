@@ -8,7 +8,7 @@ data "template_file" "api_build_buildspec" {
 }
 
 data "template_file" "api_test_buildspec" {
-  template = file("templates/te2134.yml")
+  template = file("templates/api-test-buildspec.yml")
 }
 
 data "template_file" "api_user_data" {
