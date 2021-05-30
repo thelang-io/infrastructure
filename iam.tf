@@ -3,14 +3,6 @@
 # Licensed under the MIT License
 #
 
-data "aws_iam_policy" "aws_code_deploy" {
-  arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
-}
-
-data "aws_iam_policy" "aws_code_pipeline_full" {
-  arn = "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
-}
-
 data "aws_iam_policy_document" "code_build_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -82,11 +74,26 @@ data "aws_iam_policy_document" "code_build_role_policy" {
 
   statement {
     actions = [
+      "s3:GetBucketVersioning",
       "s3:GetObject",
       "s3:GetObjectVersion",
+      "s3:PutObject",
+      "s3:PutObjectAcl"
+    ]
+
+    resources = [
+      data.aws_s3_bucket.private.arn,
+      "${data.aws_s3_bucket.private.arn}/*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "code_deploy_role_policy" {
+  statement {
+    actions = [
       "s3:GetBucketVersioning",
-      "s3:PutObjectAcl",
-      "s3:PutObject"
+      "s3:GetObject",
+      "s3:GetObjectVersion"
     ]
 
     resources = [
@@ -99,11 +106,9 @@ data "aws_iam_policy_document" "code_build_role_policy" {
 data "aws_iam_policy_document" "code_deploy_ec2_role_policy" {
   statement {
     actions = [
-      "s3:GetObject",
-      "s3:GetObjectVersion",
       "s3:GetBucketVersioning",
-      "s3:PutObjectAcl",
-      "s3:PutObject"
+      "s3:GetObject",
+      "s3:GetObjectVersion"
     ]
 
     resources = [
@@ -143,11 +148,11 @@ data "aws_iam_policy_document" "code_pipeline_role_policy" {
 
   statement {
     actions = [
+      "s3:GetBucketVersioning",
       "s3:GetObject",
       "s3:GetObjectVersion",
-      "s3:GetBucketVersioning",
-      "s3:PutObjectAcl",
-      "s3:PutObject"
+      "s3:PutObject",
+      "s3:PutObjectAcl"
     ]
 
     resources = [
@@ -183,9 +188,15 @@ resource "aws_iam_role_policy" "code_build" {
   policy = data.aws_iam_policy_document.code_build_role_policy.json
 }
 
+resource "aws_iam_role_policy" "code_deploy" {
+  name   = "CodeDeployRolePolicy"
+  role   = aws_iam_role.code_deploy.id
+  policy = data.aws_iam_policy_document.code_deploy_role_policy.json
+}
+
 resource "aws_iam_role_policy" "code_deploy_ec2" {
   name   = "CodeDeployEC2RolePolicy"
-  role   = aws_iam_role.code_build.id
+  role   = aws_iam_role.code_deploy_ec2.id
   policy = data.aws_iam_policy_document.code_deploy_ec2_role_policy.json
 }
 
@@ -193,17 +204,6 @@ resource "aws_iam_role_policy" "code_pipeline" {
   name   = "CodePipelineRolePolicy"
   role   = aws_iam_role.code_pipeline.id
   policy = data.aws_iam_policy_document.code_pipeline_role_policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "aws_code_deploy" {
-  role       = aws_iam_role.code_deploy.name
-  policy_arn = data.aws_iam_policy.aws_code_deploy.arn
-}
-
-resource "aws_iam_role_policy_attachment" "code_pipeline_full" {
-  role       = aws_iam_role.code_pipeline.name
-  policy_arn = data.aws_iam_policy.aws_code_pipeline_full.arn
-  depends_on = [aws_iam_role_policy.code_pipeline]
 }
 
 resource "aws_iam_instance_profile" "code_deploy_ec2" {

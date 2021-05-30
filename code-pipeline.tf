@@ -6,7 +6,7 @@
 resource "aws_codepipeline" "api" {
   name       = "the-api"
   role_arn   = aws_iam_role.code_pipeline.arn
-  depends_on = [aws_iam_role_policy_attachment.code_pipeline_full]
+  depends_on = [aws_iam_role_policy.code_pipeline]
 
   artifact_store {
     location = data.aws_s3_bucket.private.bucket
