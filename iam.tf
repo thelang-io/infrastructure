@@ -3,6 +3,10 @@
 # Licensed under the MIT License
 #
 
+data "aws_iam_policy" "aws_code_build_developer" {
+  arn = "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+}
+
 data "aws_iam_policy_document" "code_build_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -98,4 +102,9 @@ resource "aws_iam_role_policy" "code_pipeline" {
   name   = "CodePipelineRolePolicy"
   role   = aws_iam_role.code_pipeline.id
   policy = data.aws_iam_policy_document.code_pipeline_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "aws_code_build_developer" {
+  role       = aws_iam_role.code_build.name
+  policy_arn = data.aws_iam_policy.aws_code_build_developer.arn
 }
