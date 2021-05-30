@@ -23,7 +23,3 @@ data "template_file" "api_user_data" {
     ecosystem_config_content = replace(file("templates/api-ecosystem.config.js"), "\n", "\\n")
   }
 }
-
-output "test" {
-  value = data.template_file.api_build_buildspec.rendered
-}
