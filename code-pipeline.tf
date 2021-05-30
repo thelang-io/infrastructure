@@ -32,4 +32,21 @@ resource "aws_codepipeline" "api" {
       }
     }
   }
+
+  stage {
+    name = "Test"
+
+    action {
+      name            = "Test"
+      category        = "Test"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = ["source_output"]
+      version         = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.api_test.name
+      }
+    }
+  }
 }
