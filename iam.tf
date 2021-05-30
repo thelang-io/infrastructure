@@ -11,6 +11,10 @@ data "aws_iam_policy" "aws_code_deploy" {
   arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
+data "aws_iam_policy" "aws_code_pipeline_full" {
+  arn = "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
+}
+
 data "aws_iam_policy_document" "code_build_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -116,4 +120,10 @@ resource "aws_iam_role_policy_attachment" "aws_code_build_developer" {
 resource "aws_iam_role_policy_attachment" "aws_code_deploy" {
   role       = aws_iam_role.code_deploy.name
   policy_arn = data.aws_iam_policy.aws_code_deploy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "code_pipeline_full" {
+  role       = aws_iam_role.code_pipeline.name
+  policy_arn = data.aws_iam_policy.aws_code_pipeline_full.arn
+  depends_on = [aws_iam_role_policy.code_pipeline]
 }
