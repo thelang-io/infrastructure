@@ -25,6 +25,17 @@ data "aws_iam_policy_document" "code_deploy_role" {
   }
 }
 
+data "aws_iam_policy_document" "code_deploy_ec2_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 data "aws_iam_policy_document" "code_pipeline_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -71,6 +82,11 @@ resource "aws_iam_role" "code_build" {
 resource "aws_iam_role" "code_deploy" {
   name               = "CodeDeployRole"
   assume_role_policy = data.aws_iam_policy_document.code_deploy_role.json
+}
+
+resource "aws_iam_role" "code_deploy_ec2" {
+  name               = "CodeDeployEC2Role"
+  assume_role_policy = data.aws_iam_policy_document.code_deploy_ec2_role.json
 }
 
 resource "aws_iam_role" "code_pipeline" {
