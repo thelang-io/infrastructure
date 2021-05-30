@@ -3,10 +3,6 @@
 # Licensed under the MIT License
 #
 
-data "aws_iam_policy" "aws_code_build_admin" {
-  arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
-}
-
 data "aws_iam_policy" "aws_code_deploy" {
   arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
@@ -17,10 +13,6 @@ data "aws_iam_policy" "aws_code_pipeline_full" {
 
 data "aws_iam_policy" "aws_ec2_for_code_deploy" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
-}
-
-data "aws_iam_policy" "aws_s3_readonly" {
-  arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
 
 data "aws_iam_policy" "aws_ssm_managed_instance_core" {
@@ -71,6 +63,47 @@ data "aws_iam_policy_document" "code_pipeline_role" {
   }
 }
 
+data "aws_iam_policy_document" "code_build_role_policy" {
+  statement {
+    actions   = [
+      "ec2:CreateNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeDhcpOptions",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeVpcs"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions   = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:GetBucketVersioning",
+      "s3:PutObjectAcl",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      data.aws_s3_bucket.private.arn,
+      "${data.aws_s3_bucket.private.arn}/*"
+    ]
+  }
+}
+
 data "aws_iam_policy_document" "code_pipeline_role_policy" {
   statement {
     actions   = ["codebuild:BatchGetBuilds", "codebuild:StartBuild"]
@@ -118,20 +151,16 @@ resource "aws_iam_role" "code_pipeline" {
   assume_role_policy = data.aws_iam_policy_document.code_pipeline_role.json
 }
 
+resource "aws_iam_role_policy" "code_build" {
+  name   = "CodeBuildRolePolicy"
+  role   = aws_iam_role.code_build.id
+  policy = data.aws_iam_policy_document.code_build_role_policy.json
+}
+
 resource "aws_iam_role_policy" "code_pipeline" {
   name   = "CodePipelineRolePolicy"
   role   = aws_iam_role.code_pipeline.id
   policy = data.aws_iam_policy_document.code_pipeline_role_policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "aws_code_build_admin" {
-  role       = aws_iam_role.code_build.name
-  policy_arn = data.aws_iam_policy.aws_code_build_admin.arn
-}
-
-resource "aws_iam_role_policy_attachment" "aws_code_build_s3_readonly" {
-  role       = aws_iam_role.code_build.name
-  policy_arn = data.aws_iam_policy.aws_s3_readonly.arn
 }
 
 resource "aws_iam_role_policy_attachment" "aws_code_deploy" {
