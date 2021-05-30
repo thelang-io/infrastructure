@@ -8,7 +8,7 @@ resource "aws_codebuild_project" "api_build" {
   service_role = aws_iam_role.code_build.arn
 
   depends_on = [
-    aws_iam_role_policy_attachment.aws_code_build_developer,
+    aws_iam_role_policy_attachment.aws_code_build_admin,
     aws_iam_role_policy_attachment.aws_code_build_s3_readonly
   ]
 
@@ -35,7 +35,7 @@ resource "aws_codebuild_project" "api_test" {
   service_role = aws_iam_role.code_build.arn
 
   depends_on = [
-    aws_iam_role_policy_attachment.aws_code_build_developer,
+    aws_iam_role_policy_attachment.aws_code_build_admin,
     aws_iam_role_policy_attachment.aws_code_build_s3_readonly
   ]
 
