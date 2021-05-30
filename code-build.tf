@@ -6,7 +6,7 @@
 resource "aws_codebuild_project" "api_build" {
   name         = "the-api-build"
   service_role = aws_iam_role.code_build.arn
-  depends_on = [aws_iam_role_policy.code_build]
+  depends_on   = [aws_iam_role_policy.code_build]
 
   artifacts {
     type = "CODEPIPELINE"
@@ -29,7 +29,7 @@ resource "aws_codebuild_project" "api_build" {
 resource "aws_codebuild_project" "api_test" {
   name         = "the-api-test"
   service_role = aws_iam_role.code_build.arn
-  depends_on = [aws_iam_role_policy.code_build]
+  depends_on   = [aws_iam_role_policy.code_build]
 
   artifacts {
     type = "CODEPIPELINE"

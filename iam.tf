@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "code_pipeline_role" {
 
 data "aws_iam_policy_document" "code_build_role_policy" {
   statement {
-    actions   = [
+    actions = [
       "ec2:CreateNetworkInterface",
       "ec2:DeleteNetworkInterface",
       "ec2:DescribeDhcpOptions",
@@ -79,7 +79,7 @@ data "aws_iam_policy_document" "code_build_role_policy" {
   }
 
   statement {
-    actions   = [
+    actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents"
