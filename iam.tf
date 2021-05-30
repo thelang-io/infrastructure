@@ -19,6 +19,10 @@ data "aws_iam_policy" "aws_ec2_for_code_deploy" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
 }
 
+data "aws_iam_policy" "aws_ssm_managed_instance_core" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 data "aws_iam_policy_document" "code_build_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -129,6 +133,11 @@ resource "aws_iam_role_policy_attachment" "aws_code_deploy" {
 resource "aws_iam_role_policy_attachment" "code_deploy_ec2" {
   role       = aws_iam_role.code_deploy_ec2.name
   policy_arn = data.aws_iam_policy.aws_ec2_for_code_deploy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "code_deploy_ec2_ssm_managed_instance_core" {
+  role       = aws_iam_role.code_deploy_ec2.name
+  policy_arn = data.aws_iam_policy.aws_ssm_managed_instance_core.arn
 }
 
 resource "aws_iam_role_policy_attachment" "code_pipeline_full" {
