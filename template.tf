@@ -7,8 +7,8 @@ data "template_file" "api_build_buildspec" {
   template = file("templates/api-build-buildspec.yml")
 
   vars = {
-    appspec_content      = file("templates/api-appspec.yml")
-    start_script_content = file("templates/api-start.sh")
+    appspec_content      = replace(file("templates/api-appspec.yml"), "\n", "\\n")
+    start_script_content = replace(file("templates/api-start.sh"), "\n", "\\n")
   }
 }
 
@@ -20,6 +20,10 @@ data "template_file" "api_user_data" {
   template = file("templates/api-user-data.sh")
 
   vars = {
-    ecosystem_config_content = file("templates/api-ecosystem.config.js")
+    ecosystem_config_content = replace(file("templates/api-ecosystem.config.js"), "\n", "\\n")
   }
+}
+
+output "test" {
+  value = data.template_file.api_build_buildspec.rendered
 }
