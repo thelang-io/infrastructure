@@ -14,58 +14,14 @@ data "aws_iam_policy_document" "code_build_role" {
   }
 }
 
-data "aws_iam_policy_document" "code_build_role_policy" {
+data "aws_iam_policy_document" "code_deploy_role" {
   statement {
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
+    actions = ["sts:AssumeRole"]
 
-    resources = ["*"]
-  }
-
-  statement {
-    actions = [
-      "ec2:CreateNetworkInterface",
-      "ec2:DescribeDhcpOptions",
-      "ec2:DescribeNetworkInterfaces",
-      "ec2:DeleteNetworkInterface",
-      "ec2:DescribeSubnets",
-      "ec2:DescribeSecurityGroups",
-      "ec2:DescribeVpcs"
-    ]
-
-    resources = ["*"]
-  }
-
-  //  statement {
-  //    actions = ["ec2:CreateNetworkInterfacePermission"]
-  //    resources = ["arn:aws:ec2:us-east-1:123456789012:network-interface/*"]
-  //
-  //    condition {
-  //      test     = "StringEquals"
-  //      variable = "ec2:Subnet"
-  //      values = [aws_subnet.example1.arn, aws_subnet.example2.arn]
-  //    }
-  //
-  //    condition {
-  //      test     = "StringEquals"
-  //      variable = "ec2:AuthorizedService"
-  //      values = [
-  //        aws_s3_bucket.code_pipeline.arn,
-  //        "${aws_s3_bucket.code_pipeline.arn}/*"
-  //      ]
-  //    }
-  //  }
-
-  statement {
-    actions = ["s3:*"]
-
-    resources = [
-      aws_s3_bucket.code_pipeline.arn,
-      "${aws_s3_bucket.code_pipeline.arn}/*"
-    ]
+    principals {
+      type        = "Service"
+      identifiers = ["codedeploy.amazonaws.com"]
+    }
   }
 }
 
@@ -82,6 +38,16 @@ data "aws_iam_policy_document" "code_pipeline_role" {
 
 data "aws_iam_policy_document" "code_pipeline_role_policy" {
   statement {
+    actions   = ["codebuild:BatchGetBuilds", "codebuild:StartBuild"]
+    resources = ["*"]
+  }
+
+  statement {
+    actions   = ["codestar-connections:UseConnection"]
+    resources = [data.aws_codestarconnections_connection.langthe.arn]
+  }
+
+  statement {
     actions = [
       "s3:GetObject",
       "s3:GetObjectVersion",
@@ -91,40 +57,29 @@ data "aws_iam_policy_document" "code_pipeline_role_policy" {
     ]
 
     resources = [
-      aws_s3_bucket.code_pipeline.arn,
-      "${aws_s3_bucket.code_pipeline.arn}/*"
+      data.aws_s3_bucket.private.arn,
+      "${data.aws_s3_bucket.private.arn}/*"
     ]
-  }
-
-  statement {
-    actions   = ["codestar-connections:UseConnection"]
-    resources = [data.aws_codestarconnections_connection.langthe.arn]
-  }
-
-  statement {
-    actions   = ["codebuild:BatchGetBuilds", "codebuild:StartBuild"]
-    resources = ["*"]
   }
 }
 
 resource "aws_iam_role" "code_build" {
-  name               = "AWSCodeBuildServiceRole"
+  name               = "CodeBuildRole"
   assume_role_policy = data.aws_iam_policy_document.code_build_role.json
 }
 
-resource "aws_iam_role_policy" "code_build" {
-  name   = "AWSCodeBuildServiceRolePolicy"
-  role   = aws_iam_role.code_build.id
-  policy = data.aws_iam_policy_document.code_build_role_policy.json
+resource "aws_iam_role" "code_deploy" {
+  name               = "CodeDeployRole"
+  assume_role_policy = data.aws_iam_policy_document.code_deploy_role.json
 }
 
 resource "aws_iam_role" "code_pipeline" {
-  name               = "AWSCodePipelineServiceRole"
+  name               = "CodePipelineRole"
   assume_role_policy = data.aws_iam_policy_document.code_pipeline_role.json
 }
 
 resource "aws_iam_role_policy" "code_pipeline" {
-  name   = "AWSCodePipelineServiceRolePolicy"
+  name   = "CodePipelineRolePolicy"
   role   = aws_iam_role.code_pipeline.id
   policy = data.aws_iam_policy_document.code_pipeline_role_policy.json
 }
