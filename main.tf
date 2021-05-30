@@ -7,8 +7,8 @@
 # Before using:
 #  1. Create Access Key
 #  2. Create S3 bucket "the-private"
-#  3. Create DynamoDB table "the-private"
-#  3. Create CodeStar connection
+#  3. Create DynamoDB table "the-private" with key "LockID"
+#  4. Create CodeStar connection
 #
 
 terraform {
@@ -32,5 +32,5 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = "eu-central-1"
+  region  = "us-east-1"
 }
