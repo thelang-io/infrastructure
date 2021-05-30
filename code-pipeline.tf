@@ -67,4 +67,22 @@ resource "aws_codepipeline" "api" {
       }
     }
   }
+
+  stage {
+    name = "Deploy"
+
+    action {
+      name            = "Deploy"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "CodeDeploy"
+      input_artifacts = ["build_output"]
+      version         = "1"
+
+      configuration = {
+        ApplicationName     = aws_codedeploy_app.api.name
+        DeploymentGroupName = aws_codedeploy_deployment_group.api.deployment_group_name
+      }
+    }
+  }
 }
