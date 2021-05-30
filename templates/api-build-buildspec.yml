@@ -20,8 +20,9 @@ phases:
       - npm run build
       - mv build_node_modules build/node_modules
       - mkdir -p build/scripts
-      - printf "%s" "${start_script_content}" > build/scripts/start.sh
-      - printf "%s" "${appspec_content}" > build/appspec.yml
+      - |
+        printf "%s" "${start_script_content}" > build/scripts/start.sh
+        printf "%s" "${appspec_content}" > build/appspec.yml
 
 artifacts:
   files:
