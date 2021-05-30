@@ -106,7 +106,24 @@ data "aws_iam_policy_document" "code_build_role_policy" {
 
 data "aws_iam_policy_document" "code_pipeline_role_policy" {
   statement {
-    actions   = ["codebuild:BatchGetBuilds", "codebuild:StartBuild"]
+    actions   = [
+      "codebuild:BatchGetBuilds",
+      "codebuild:StartBuild"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "codedeploy:CreateDeployment",
+      "codedeploy:GetApplication",
+      "codedeploy:GetApplicationRevision",
+      "codedeploy:GetDeployment",
+      "codedeploy:GetDeploymentConfig",
+      "codedeploy:RegisterApplicationRevision"
+    ]
+
     resources = ["*"]
   }
 
