@@ -19,6 +19,10 @@ data "aws_iam_policy" "aws_ec2_for_code_deploy" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
 }
 
+data "aws_iam_policy" "aws_s3_readonly" {
+  arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
+
 data "aws_iam_policy" "aws_ssm_managed_instance_core" {
   arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
@@ -123,6 +127,11 @@ resource "aws_iam_role_policy" "code_pipeline" {
 resource "aws_iam_role_policy_attachment" "aws_code_build_developer" {
   role       = aws_iam_role.code_build.name
   policy_arn = data.aws_iam_policy.aws_code_build_developer.arn
+}
+
+resource "aws_iam_role_policy_attachment" "aws_code_build_s3_readonly" {
+  role       = aws_iam_role.code_build.name
+  policy_arn = data.aws_iam_policy.aws_s3_readonly.arn
 }
 
 resource "aws_iam_role_policy_attachment" "aws_code_deploy" {
