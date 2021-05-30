@@ -154,3 +154,13 @@ resource "aws_iam_role_policy_attachment" "code_pipeline_full" {
   policy_arn = data.aws_iam_policy.aws_code_pipeline_full.arn
   depends_on = [aws_iam_role_policy.code_pipeline]
 }
+
+resource "aws_iam_instance_profile" "code_deploy_ec2" {
+  name = "CodeDeployEC2InstanceProfile"
+  role = aws_iam_role.code_deploy_ec2.name
+
+  depends_on = [
+    aws_iam_role_policy_attachment.code_deploy_ec2,
+    aws_iam_role_policy_attachment.code_deploy_ec2_ssm_managed_instance_core
+  ]
+}
