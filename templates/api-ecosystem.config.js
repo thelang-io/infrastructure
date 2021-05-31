@@ -1,8 +1,8 @@
 module.exports = {
   apps: [{
-    name: 'app',
+    name: 'api',
     cwd: '/app',
-    script: 'app.js',
+    script: 'api.js',
     env: {
       NODE_ENV: 'production',
       PORT: '8080'
