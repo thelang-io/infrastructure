@@ -12,7 +12,7 @@ data "template_file" "api_build_buildspec" {
 
   vars = {
     appspec_content      = replace(data.template_file.api_appspec.rendered, "\n", "\\n")
-    start_script_content = replace(file("templates/api-start.sh"), "\n", "\\n")
+    start_script_content = replace(data.template_file.api_start_script.rendered, "\n", "\\n")
   }
 }
 
@@ -22,6 +22,10 @@ data "template_file" "api_ecosystem_config" {
   vars = {
     auth_token = var.auth_token
   }
+}
+
+data "template_file" "api_start_script" {
+  template = file("templates/api-start.sh")
 }
 
 data "template_file" "api_test_buildspec" {
