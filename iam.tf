@@ -91,6 +91,16 @@ data "aws_iam_policy_document" "code_build_role_policy" {
 data "aws_iam_policy_document" "code_deploy_role_policy" {
   statement {
     actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeInstanceStatus",
+      "ec2:TerminateInstances"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
       "s3:GetBucketVersioning",
       "s3:GetObject",
       "s3:GetObjectVersion"
