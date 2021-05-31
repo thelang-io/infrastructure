@@ -19,6 +19,6 @@ npm install -g pm2
 pm2 startup -u ubuntu --hp /home/ubuntu
 
 mkdir -p /app
-printf "%s" "${ecosystem_config_content}" > /ecosystem.config.js
+printf "${ecosystem_config_content}" > /ecosystem.config.js
 
 reboot
