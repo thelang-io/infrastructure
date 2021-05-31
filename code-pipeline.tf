@@ -4,7 +4,7 @@
 #
 
 resource "aws_codepipeline" "api" {
-  name       = "the-api"
+  name       = "the-api-codepipeline"
   role_arn   = aws_iam_role.code_pipeline.arn
   depends_on = [aws_iam_role_policy.code_pipeline]
 
