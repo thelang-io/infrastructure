@@ -10,7 +10,7 @@ resource "aws_codedeploy_app" "api" {
 
 resource "aws_codedeploy_deployment_group" "api" {
   app_name              = aws_codedeploy_app.api.name
-  deployment_group_name = "the-api-codedeploy-group"
+  deployment_group_name = "the-api-codedeploy-deployment-group"
   service_role_arn      = aws_iam_role.code_deploy.arn
   depends_on            = [aws_iam_role_policy.code_deploy]
 
