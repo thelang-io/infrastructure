@@ -1,3 +1,8 @@
+//
+// Copyright (c) 2021-present Aaron Delasy
+// Licensed under the MIT License
+//
+
 module.exports = {
   apps: [{
     name: 'api',
