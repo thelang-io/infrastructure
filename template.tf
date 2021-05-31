@@ -3,11 +3,15 @@
 # Licensed under the MIT License
 #
 
+data "template_file" "api_appspec" {
+  template = file("templates/api-appspec.yml")
+}
+
 data "template_file" "api_build_buildspec" {
   template = file("templates/api-build-buildspec.yml")
 
   vars = {
-    appspec_content      = replace(file("templates/api-appspec.yml"), "\n", "\\n")
+    appspec_content      = replace(data.template_file.api_appspec.rendered, "\n", "\\n")
     start_script_content = replace(file("templates/api-start.sh"), "\n", "\\n")
   }
 }
