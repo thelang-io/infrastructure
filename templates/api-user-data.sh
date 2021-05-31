@@ -20,5 +20,3 @@ pm2 startup -u ubuntu --hp /home/ubuntu
 
 mkdir -p /app
 printf "${ecosystem_config_content}" > /ecosystem.config.js
-
-reboot
