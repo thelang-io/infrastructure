@@ -4,7 +4,7 @@
 #
 
 resource "aws_codebuild_project" "api_build" {
-  name         = "the-api-build"
+  name         = "the-api-build-codebuild"
   service_role = aws_iam_role.code_build.arn
   depends_on   = [aws_iam_role_policy.code_build]
 
@@ -27,7 +27,7 @@ resource "aws_codebuild_project" "api_build" {
 }
 
 resource "aws_codebuild_project" "api_test" {
-  name         = "the-api-test"
+  name         = "the-api-test-codebuild"
   service_role = aws_iam_role.code_build.arn
   depends_on   = [aws_iam_role_policy.code_build]
 
