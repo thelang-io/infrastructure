@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021-present Aaron Delasy
+# Copyright (c) 2018-present Aaron Delasy
 # Licensed under the MIT License
 #
 
