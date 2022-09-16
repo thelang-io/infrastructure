@@ -37,8 +37,4 @@ resource "aws_instance" "api" {
   key_name               = "_"
   user_data              = data.template_file.api_user_data.rendered
   vpc_security_group_ids = [aws_security_group.public.id]
-
-  tags = {
-    Name = "the-api"
-  }
 }
