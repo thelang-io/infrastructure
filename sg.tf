@@ -7,6 +7,13 @@ resource "aws_security_group" "public" {
   name = "public"
 
   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(data.http.ip.body)}/32"]
+  }
+
+  ingress {
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
