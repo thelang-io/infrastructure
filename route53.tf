@@ -12,6 +12,8 @@ data "aws_route53_zone" "cdn" {
 }
 
 resource "aws_route53_record" "api" {
+  depends_on = [aws_instance.api]
+
   zone_id = data.aws_route53_zone.api.zone_id
   name    = "api.thelang.io"
   type    = "A"

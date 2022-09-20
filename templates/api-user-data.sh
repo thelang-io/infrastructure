@@ -10,7 +10,7 @@ set -ex
 apt-get update -y
 
 curl -L https://deb.nodesource.com/setup_lts.x | bash
-apt-get install -y build-essential certbot cmake nginx nodejs python3-certbot-nginx
+apt-get install -y build-essential certbot clang cmake nginx nodejs python3-certbot-nginx
 
 npm install -g pm2
 pm2 startup -u ubuntu --hp /home/ubuntu
@@ -40,3 +40,11 @@ certbot --nginx --agree-tos --redirect -d api.thelang.io -m support@thelang.io -
 
 mkdir -p /app
 chown -R ubuntu:ubuntu /app
+
+apt-get install -y mingw-w64 libssl-dev lzma-dev libxml2-dev llvm-dev
+git clone https://github.com/tpoechtrager/osxcross.git /home/ubuntu/osxcross/
+echo "PATH=\"\$HOME/osxcross/target/bin:\$PATH\"" >> /home/ubuntu/.profile
+curl http://cdn.delasy.com.s3-website.eu-central-1.amazonaws.com/MacOSX12.3.sdk.tar.xz \
+  -o /home/ubuntu/osxcross/tarballs/MacOSX12.3.sdk.tar.xz
+
+UNATTENDED=1 nohup bash -c "/home/ubuntu/osxcross/build.sh > /home/ubuntu/osxcross-build.log 2>&1" > /dev/null 2>&1 &
