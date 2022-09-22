@@ -42,9 +42,11 @@ mkdir -p /app
 chown -R ubuntu:ubuntu /app
 
 apt-get install -y mingw-w64 libssl-dev lzma-dev libxml2-dev llvm-dev
+
+sudo -u ubuntu -i << EOF
 git clone https://github.com/tpoechtrager/osxcross.git /home/ubuntu/osxcross/
-echo "PATH=\"\$HOME/osxcross/target/bin:\$PATH\"" >> /home/ubuntu/.profile
 curl http://cdn.delasy.com.s3-website.eu-central-1.amazonaws.com/MacOSX12.3.sdk.tar.xz \
   -o /home/ubuntu/osxcross/tarballs/MacOSX12.3.sdk.tar.xz
-
+echo "PATH=\"\$HOME/osxcross/target/bin:\$PATH\"" >> /home/ubuntu/.profile
 UNATTENDED=1 nohup bash -c "/home/ubuntu/osxcross/build.sh > /home/ubuntu/osxcross-build.log 2>&1" > /dev/null 2>&1 &
+EOF
