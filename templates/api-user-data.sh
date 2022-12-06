@@ -30,6 +30,7 @@ server {
     chunked_transfer_encoding off;
     proxy_buffering off;
     proxy_cache off;
+    keepalive_timeout 120;
   }
 }
 EOF
@@ -43,10 +44,25 @@ chown -R ubuntu:ubuntu /app
 
 apt-get install -y mingw-w64 libssl-dev lzma-dev libxml2-dev llvm-dev
 
+git config --system advice.detachedHead false
 git clone https://github.com/tpoechtrager/osxcross.git /home/ubuntu/osxcross/
 curl http://cdn.delasy.com.s3-website.eu-central-1.amazonaws.com/MacOSX12.3.sdk.tar.xz \
   -o /home/ubuntu/osxcross/tarballs/MacOSX12.3.sdk.tar.xz
-echo "PATH=\"/usr/local/osxcross/bin:\$PATH\"" >> /home/ubuntu/.profile
+sed -e 's|PATH="\(.*\)"|PATH="/usr/local/osxcross/bin:\1"|g' -i /etc/environment
+echo "OSXCROSS_MP_INC=1" >> /etc/environment
 
-TARGET_DIR=/usr/local/osxcross UNATTENDED=1 nohup \
-  bash -c "/home/ubuntu/osxcross/build.sh > /home/ubuntu/osxcross-build.log 2>&1" > /dev/null 2>&1 &
+cat << EOF > /home/ubuntu/init.sh
+#!/usr/bin/env bash
+set -e
+TARGET_DIR=/usr/local/osxcross UNATTENDED=1 /home/ubuntu/osxcross/build.sh
+export PATH="/usr/local/osxcross/bin:$PATH"
+export MACOSX_DEPLOYMENT_TARGET=10.15
+export OSXCROSS_MACPORTS_MIRROR=https://packages.macports.org
+sed -i 's/\bopenssl rmd160\b/openssl rmd160 -provider legacy/g' /usr/local/osxcross/bin/osxcross-macports
+sed -i 's/\bopenssl dgst -ripemd160 -verify\b/openssl dgst -provider default -provider legacy -ripemd160 -verify/g' /usr/local/osxcross/bin/osxcross-macports
+osxcross-macports install openssl
+ln -sf /usr/local/osxcross/macports/pkgs/opt/local /opt/
+EOF
+
+chmod +x /home/ubuntu/init.sh
+nohup bash -c "/home/ubuntu/init.sh > /home/ubuntu/osxcross-build.log 2>&1" > /dev/null 2>&1 &
