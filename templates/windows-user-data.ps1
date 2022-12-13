@@ -1,6 +1,5 @@
 Set-StrictMode -Version latest
 $ErrorActionPreference = 'Stop'
-$InitialProgressPreference = $ProgressPreference
 
 function Choco-Download ([string] $URL) {
   Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -12,9 +11,18 @@ function Get-SystemEnv ([string] $Name) {
   [Environment]::GetEnvironmentVariable($Name, [EnvironmentVariableTarget]::Machine)
 }
 
+function NotepadPlusPlus-Download ([string] $URL) {
+  $InstallerPath = "$HOME/npp-installer.exe"
+
+  Invoke-WebRequest -URI $URL -OutFile $InstallerPath
+  & $InstallerPath /S
+  Remove-Item $InstallerPath
+}
+
 function Refresh-Env () {
   $ChocoInstallPath = (Get-Command choco).Path
   $env:ChocolateyInstall = Convert-Path "$ChocoInstallPath/../.."
+
   Import-Module "$env:ChocolateyInstall/helpers/chocolateyProfile.psm1"
   refreshenv
 }
@@ -23,20 +31,31 @@ function Set-SystemEnv ([string] $Name, [string] $Value) {
   [System.Environment]::SetEnvironmentVariable($Name, $Value, [System.EnvironmentVariableTarget]::Machine)
 }
 
-function ThePackages-Download ([string] $URL) {
-  $ProgressPreference = 'SilentlyContinue'
-  Invoke-WebRequest -URI $URL -OutFile C:/Users/Administrator/Desktop/packages.tar.gz
-  $ProgressPreference = $InitialProgressPreference
-  New-Item -ItemType Directory -Force -Path C:/Users/Administrator/Desktop/packages
-  tar -xzf C:/Users/Administrator/Desktop/packages.tar.gz --directory C:/Users/Administrator/Desktop/packages --strip-components=2 the/windows
+function TheSource-Download ([string] $URL) {
+  $InstallPath = "$HOME/Desktop/the"
+  $BuildPath = "$InstallPath/build"
 
-  Set-SystemEnv -Name PACKAGES_DIR -Value C:/Users/Administrator/Desktop/packages
+  git clone --depth=1 $URL $InstallPath
+  cmake $InstallPath -B $BuildPath -G 'Visual Studio 17 2022' -D BUILD_TESTS=ON
+  cmake --build $BuildPath
+}
+
+function ThePackages-Download ([string] $URL) {
+  $ArchivePath = "$HOME/packages.tar.gz"
+  $InstallPath = "$HOME/Desktop/packages"
+
+  Invoke-WebRequest -URI $URL -OutFile $ArchivePath
+  New-Item -ItemType Directory -Force -Path $InstallPath
+  tar -xzf $ArchivePath --directory $InstallPath --strip-components=2 the/windows
+  Set-SystemEnv -Name PACKAGES_DIR -Value $InstallPath
+  Remove-Item $ArchivePath
 }
 
 function VisualStudio-Download ([string] $URL) {
-  Invoke-WebRequest -URI $URL -OutFile C:/Users/Administrator/Desktop/vs_community.exe
+  $InstallerPath = "$HOME/vs_community.exe"
+  Invoke-WebRequest -URI $URL -OutFile $InstallerPath
 
-  C:/Users/Administrator/Desktop/vs_community.exe `
+  & $InstallerPath `
     --add Microsoft.VisualStudio.Workload.NativeDesktop `
     --add Microsoft.VisualStudio.Component.VC.CMake.Project `
     --add Microsoft.VisualStudio.Component.Windows11SDK.22000 `
@@ -55,17 +74,17 @@ function VisualStudio-Download ([string] $URL) {
   $Path += ';C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\\x64\bin'
 
   Set-SystemEnv -Name PATH -Value $Path
+  Remove-Item $InstallerPath
 }
 
 function main () {
   VisualStudio-Download -URL https://aka.ms/vs/17/release/vs_community.exe
+  NotepadPlusPlus-Download -URL https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.4.7/npp.8.4.7.Installer.x64.exe
   Choco-Download -URL https://community.chocolatey.org/install.ps1
   choco install --no-progress -y git
   ThePackages-Download -URL https://cdn.thelang.io/packages.tar.gz
   Refresh-Env
-  git clone --depth=1 https://github.com/thelang-io/the.git C:/Users/Administrator/Desktop/the
-  cmake C:/Users/Administrator/Desktop/the -B C:/Users/Administrator/Desktop/the/build -G 'Visual Studio 17 2022' -D BUILD_TESTS=ON
-  cmake --build C:/Users/Administrator/Desktop/the/build
+  TheSource-Download -URL https://github.com/thelang-io/the.git
 }
 
 main
