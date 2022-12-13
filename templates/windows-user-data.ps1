@@ -70,7 +70,6 @@ function VisualStudio-Download ([string] $URL) {
   $Path += ';C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE'
   $Path += ';C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools'
   $Path += ';C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin'
-  $Path += ';C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja'
   $Path += ';C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\\x64\bin'
 
   Set-SystemEnv -Name PATH -Value $Path
