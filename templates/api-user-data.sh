@@ -45,4 +45,3 @@ certbot --nginx --agree-tos --redirect -d api.thelang.io -m support@thelang.io -
 
 curl -fsSL https://cdn.thelang.io/packages.tar.gz | tar -xzf - -C /usr/local
 sed -e 's|PATH="\(.*\)"|PATH="/usr/local/the/osxcross/bin:\1"|g' -i /etc/environment
-echo "PACKAGES_DIR=/usr/local/the" >> /etc/environment
