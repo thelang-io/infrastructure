@@ -52,7 +52,7 @@ function ThePackages-Download ([string] $URL) {
 
   Invoke-WebRequest -URI $URL -OutFile $ArchivePath
   New-Item -ItemType Directory -Force -Path $InstallPath
-  tar -xzf $ArchivePath --directory $InstallPath --strip-components=2 the/native/windows
+  tar -xzf $ArchivePath --directory $InstallPath --strip-components=3 the/native/windows
   Set-SystemEnv -Name PACKAGES_DIR -Value $InstallPath
   Remove-Item $ArchivePath
 }
