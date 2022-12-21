@@ -43,5 +43,5 @@ ln -sf /etc/nginx/sites-available/api.thelang.io /etc/nginx/sites-enabled/
 systemctl restart nginx
 certbot --nginx --agree-tos --redirect -d api.thelang.io -m support@thelang.io -n
 
-curl -fsSL https://cdn.thelang.io/packages.tar.gz | tar -xzf - -C /usr/local
+curl -fsSL https://cdn.thelang.io/packages.tar.gz | tar -C /usr/local -xz
 sed -e 's|PATH="\(.*\)"|PATH="/usr/local/the/osxcross/bin:\1"|g' -i /etc/environment
