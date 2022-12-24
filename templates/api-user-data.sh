@@ -45,3 +45,4 @@ certbot --nginx --agree-tos --redirect -d api.thelang.io -m support@thelang.io -
 
 curl -fsSL https://cdn.thelang.io/packages.tar.gz | tar -C /usr/local -xz
 sed -e 's|PATH="\(.*\)"|PATH="/usr/local/the/osxcross/bin:\1"|g' -i /etc/environment
+sed -e 's/#define _WIN32_WINNT .*/#define _WIN32_WINNT 0x0A00/' -i /usr/share/mingw-w64/include/_mingw.h
