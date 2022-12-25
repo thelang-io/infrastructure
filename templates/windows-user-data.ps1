@@ -46,14 +46,14 @@ function Choco-Download ([string] $URL) {
   (New-Object System.Net.WebClient).DownloadString($URL) | iex
 }
 
-function ThePackages-Download ([string] $URL) {
-  $ArchivePath = "$HOME/packages.tar.gz"
-  $InstallPath = "$HOME/Desktop/packages"
+function TheDependencies-Download ([string] $URL) {
+  $ArchivePath = "$HOME/deps.tar.gz"
+  $InstallPath = "$HOME/Desktop/deps"
 
   Invoke-WebRequest -URI $URL -OutFile $ArchivePath
   New-Item -ItemType Directory -Force -Path $InstallPath
   tar -xzf $ArchivePath --directory $InstallPath --strip-components=3 the/native/windows
-  Set-SystemEnv -Name PACKAGES_DIR -Value $InstallPath
+  Set-SystemEnv -Name DEPS_DIR -Value $InstallPath
   Remove-Item $ArchivePath
 }
 
@@ -82,7 +82,7 @@ function main () {
     NotepadPlusPlus-Download -URL https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.4.7/npp.8.4.7.Installer.x64.exe
     Choco-Download -URL https://community.chocolatey.org/install.ps1
     choco install --no-progress -y git
-    ThePackages-Download -URL https://cdn.thelang.io/packages.tar.gz
+    TheDependencies-Download -URL https://cdn.thelang.io/deps.tar.gz
     Refresh-Env
     TheSource-Download -URL https://github.com/thelang-io/the.git
   } catch {
