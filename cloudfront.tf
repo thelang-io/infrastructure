@@ -19,6 +19,7 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   enabled             = true
   is_ipv6_enabled     = true
+  http_version        = "http1.1"
   default_root_object = "index.html"
 
   aliases = [data.aws_route53_zone.cdn.name]
@@ -53,7 +54,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   viewer_certificate {
     acm_certificate_arn      = aws_acm_certificate_validation.cert.certificate_arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   custom_error_response {
