@@ -39,12 +39,12 @@ server {
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Host \$host;
     proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_set_header X-Real-IP \$remote_addr;
   }
 }
 EOF
 
 ln -sf /etc/nginx/sites-available/ci.thelang.io /etc/nginx/sites-enabled/
+sed -e 's/# server_tokens off;/server_tokens off;/' -i /etc/nginx/nginx.conf
 systemctl restart nginx
 certbot --nginx --agree-tos --no-redirect -d ci.thelang.io -m support@thelang.io -n
 
