@@ -65,6 +65,10 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   wait_for_deployment = false
+
+  tags = {
+    Name = "TheCDN"
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
