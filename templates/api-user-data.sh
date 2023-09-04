@@ -47,5 +47,7 @@ systemctl restart nginx
 certbot --nginx --agree-tos --redirect -d api.thelang.io -m support@thelang.io -n
 
 curl -fsSL https://cdn.thelang.io/deps.tar.gz | tar -C /usr/local -xz
+curl -fsSL https://cdn.thelang.io/cli | bash
+
 sed -e 's|PATH="\(.*\)"|PATH="/usr/local/the/osxcross/bin:\1"|g' -i /etc/environment
 sed -e 's/#define _WIN32_WINNT .*/#define _WIN32_WINNT 0x0A00/' -i /usr/share/mingw-w64/include/_mingw.h

@@ -49,3 +49,4 @@ systemctl restart nginx
 certbot --nginx --agree-tos --no-redirect -d ci.thelang.io -m support@thelang.io -n
 
 curl -fsSL https://cdn.thelang.io/deps.tar.gz | tar -C /usr/local -xz
+curl -fsSL https://cdn.thelang.io/cli | bash
