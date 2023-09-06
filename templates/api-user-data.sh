@@ -26,6 +26,7 @@ server {
   root /var/www/html;
   index index.html index.htm index.nginx-debian.html;
   server_name api.thelang.io;
+  client_max_body_size 200M;
   location / {
     proxy_pass http://localhost:8080;
     proxy_http_version 1.1;
