@@ -5,7 +5,7 @@
 
 resource "aws_instance" "api" {
   ami                         = data.aws_ami.ubuntu-2004.id
-  instance_type               = "t2.micro"
+  instance_type               = "t2.small"
   key_name                    = "_"
   user_data                   = templatefile("templates/api-user-data.sh", {})
   user_data_replace_on_change = true
