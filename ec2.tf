@@ -21,7 +21,7 @@ resource "aws_instance" "api" {
 }
 
 resource "aws_instance" "ci" {
-  ami                         = data.aws_ami.ubuntu-2204.id
+  ami                         = data.aws_ami.ubuntu-2004.id
   instance_type               = "t2.micro"
   key_name                    = "_"
   user_data                   = templatefile("templates/ci-user-data.sh", {})
