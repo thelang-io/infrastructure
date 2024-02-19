@@ -22,7 +22,7 @@ resource "aws_route53_record" "api" {
   name    = "api.thelang.io"
   type    = "A"
   ttl     = "3600"
-  records = [aws_instance.api.public_ip]
+  records = [aws_eip.api.public_ip]
 }
 
 resource "aws_route53_record" "cdn" {
