@@ -3,26 +3,8 @@
 # Licensed under the MIT License
 #
 
-data "aws_route53_zone" "api" {
-  name = "api.thelang.io"
-}
-
 data "aws_route53_zone" "cdn" {
   name = "cdn.thelang.io"
-}
-
-data "aws_route53_zone" "ci" {
-  name = "ci.thelang.io"
-}
-
-resource "aws_route53_record" "api" {
-  depends_on = [aws_instance.api]
-
-  zone_id = data.aws_route53_zone.api.zone_id
-  name    = "api.thelang.io"
-  type    = "A"
-  ttl     = "3600"
-  records = [aws_eip.api.public_ip]
 }
 
 resource "aws_route53_record" "cdn" {
@@ -35,16 +17,6 @@ resource "aws_route53_record" "cdn" {
     zone_id                = aws_cloudfront_distribution.cdn.hosted_zone_id
     evaluate_target_health = false
   }
-}
-
-resource "aws_route53_record" "ci" {
-  depends_on = [aws_instance.ci]
-
-  zone_id = data.aws_route53_zone.ci.zone_id
-  name    = "ci.thelang.io"
-  type    = "A"
-  ttl     = "3600"
-  records = [aws_instance.ci.public_ip]
 }
 
 resource "aws_route53_record" "cdn_cert_validation" {
