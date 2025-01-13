@@ -3,6 +3,6 @@
 # Licensed under the MIT License
 #
 
-# data "cloudflare_zone" "thelang" {
-#   name = "thelang.io"
-# }
+data "cloudflare_zone" "thelang" {
+  name = "thelang.io"
+}
