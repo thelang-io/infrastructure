@@ -19,7 +19,7 @@ ln -s /snap/bin/certbot /usr/bin/certbot
 
 # Install Clang
 curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-add-apt-repository -y "deb http://apt.llvm.org/focal/ llvm-toolchain-$(lsb_release -cs)-18 main"
+add-apt-repository -y "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs)-18 main"
 apt-get install -y clang-18 lldb-18 lld-18 clangd-18
 ln -s /usr/bin/clang-18 /usr/bin/clang
 ln -s /usr/bin/clangd-18 /usr/bin/clangd
