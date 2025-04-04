@@ -3,6 +3,6 @@
 # Licensed under the MIT License
 #
 
-data "http" "ip" {
-  url = "http://ipv4.icanhazip.com"
-}
+# data "http" "ip" {
+#   url = "http://ipv4.icanhazip.com"
+# }

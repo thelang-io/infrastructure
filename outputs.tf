@@ -7,6 +7,6 @@
 #   value = aws_eip.api.public_ip
 # }
 
-output "ec2_ci_ip" {
-  value = aws_eip.ci.public_ip
-}
+# output "ec2_ci_ip" {
+#   value = aws_eip.ci.public_ip
+# }

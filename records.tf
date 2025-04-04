@@ -11,10 +11,10 @@
 #   proxied = true
 # }
 
-resource "cloudflare_record" "ci" {
-  name    = "ci"
-  type    = "A"
-  zone_id = data.cloudflare_zone.thelang.id
-  content = aws_eip.ci.public_ip
-  proxied = true
-}
+# resource "cloudflare_record" "ci" {
+#   name    = "ci"
+#   type    = "A"
+#   zone_id = data.cloudflare_zone.thelang.id
+#   content = aws_eip.ci.public_ip
+#   proxied = true
+# }

@@ -8,7 +8,7 @@
 #   domain   = "vpc"
 # }
 
-resource "aws_eip" "ci" {
-  instance = aws_instance.ci.id
-  domain   = "vpc"
-}
+# resource "aws_eip" "ci" {
+#   instance = aws_instance.ci.id
+#   domain   = "vpc"
+# }
